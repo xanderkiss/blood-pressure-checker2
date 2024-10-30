@@ -113,11 +113,11 @@
         <h2>ป้อนค่าความดันโลหิต</h2>
         <div class="input-group">
             <label for="sys">SYS mmHg:</label>
-            <input type="number" id="sys" placeholder="SYS mmHg" required>
+            <input type="number" id="sys" placeholder="SYS mmHg">
         </div>
         <div class="input-group">
             <label for="dia">DIA mmHg:</label>
-            <input type="number" id="dia" placeholder="DIA mmHg" required>
+            <input type="number" id="dia" placeholder="DIA mmHg">
         </div>
         <button onclick="checkBloodPressure()">คำนวณ</button>
         <button onclick="resetFields()" style="background-color: #f44336; margin-top: 10px;">รีเซ็ต</button>
@@ -129,6 +129,12 @@
     </div>
 
     <script>
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            checkBloodPressure();
+        }
+    });
+
     function checkBloodPressure() {
         const sys = parseInt(document.getElementById("sys").value);
         const dia = parseInt(document.getElementById("dia").value);
@@ -136,12 +142,12 @@
         let advice = "";
         let resultClass = "";
 
-        if (isNaN(sys) || isNaN(dia) || sys <= 0 || dia <= 0) {
+        // เพิ่มการตรวจสอบค่าขอบเขต
+        if (isNaN(sys) || isNaN(dia) || sys < 10 || sys > 300 || dia < 10 || dia > 300) {
             alert("กรุณากรอกค่าความดันโลหิตให้ถูกต้อง");
             return;
         }
 
-        // เพิ่มเงื่อนไขสำหรับความดันโลหิตต่ำ
         if (sys < 90 || dia < 60) {
             resultText = "ความดันโลหิตต่ำ";
             advice = "หลีกเลี่ยงความเครียดและการเปลี่ยนท่านั่งหรือยืนอย่างรวดเร็ว";
@@ -168,7 +174,13 @@
         resultDiv.innerHTML = `<p>${resultText}</p><p>${advice}</p>`;
         resultDiv.className = `result ${resultClass}`;
     }
-</script>
 
+    function resetFields() {
+        document.getElementById("sys").value = "";
+        document.getElementById("dia").value = "";
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("result").className = "result";
+    }
+    </script>
 </body>
 </html>
