@@ -125,57 +125,46 @@
     </div>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then(() => {
-                    console.log('Service Worker registered');
-                })
-                .catch((error) => {
-                    console.error('Service Worker registration failed:', error);
-                });
+    function checkBloodPressure() {
+        const sys = parseInt(document.getElementById("sys").value);
+        const dia = parseInt(document.getElementById("dia").value);
+        let resultText = "";
+        let advice = "";
+        let resultClass = "";
+
+        if (isNaN(sys) || isNaN(dia) || sys <= 0 || dia <= 0) {
+            alert("กรุณากรอกค่าความดันโลหิตให้ถูกต้อง");
+            return;
         }
 
-        function checkBloodPressure() {
-            const sys = parseInt(document.getElementById("sys").value);
-            const dia = parseInt(document.getElementById("dia").value);
-            let resultText = "";
-            let advice = "";
-            let resultClass = "";
-
-            if (isNaN(sys) || isNaN(dia) || sys <= 0 || dia <= 0) {
-                alert("กรุณากรอกค่าความดันโลหิตให้ถูกต้อง");
-                return;
-            }
-
-            if (sys >= 160 || dia > 100) {
-                resultText = "ความดันโลหิตสูงมาก";
-                advice = "พบแพทย์ด่วน";
-                resultClass = "very-high";
-            } else if (sys >= 140 || dia >= 90) {
-                resultText = "ความดันโลหิตสูง";
-                advice = "พบแพทย์ คุมอาหารและออกกำลังกาย";
-                resultClass = "high";
-            } else if (sys >= 121 || dia >= 80) {
-                resultText = "ความดันโลหิตเริ่มสูง";
-                advice = "คุมอาหารและออกกำลังกาย";
-                resultClass = "elevated";
-            } else {
-                resultText = "ความดันโลหิตปกติ";
-                advice = "เต็มที่กับชีวิต";
-                resultClass = "normal";
-            }
-
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = `<p>${resultText}</p><p>${advice}</p>`;
-            resultDiv.className = `result ${resultClass}`;
+        // เพิ่มเงื่อนไขสำหรับความดันโลหิตต่ำ
+        if (sys < 90 || dia < 60) {
+            resultText = "ความดันโลหิตต่ำ";
+            advice = "หลีกเลี่ยงความเครียดและการเปลี่ยนท่านั่งหรือยืนอย่างรวดเร็ว";
+            resultClass = "low";
+        } else if (sys >= 160 || dia > 100) {
+            resultText = "ความดันโลหิตสูงมาก";
+            advice = "พบแพทย์ด่วน";
+            resultClass = "very-high";
+        } else if (sys >= 140 || dia >= 90) {
+            resultText = "ความดันโลหิตสูง";
+            advice = "พบแพทย์ คุมอาหารและออกกำลังกาย";
+            resultClass = "high";
+        } else if (sys >= 121 || dia >= 80) {
+            resultText = "ความดันโลหิตเริ่มสูง";
+            advice = "คุมอาหารและออกกำลังกาย";
+            resultClass = "elevated";
+        } else {
+            resultText = "ความดันโลหิตปกติ";
+            advice = "เต็มที่กับชีวิต";
+            resultClass = "normal";
         }
 
-        function resetFields() {
-            document.getElementById("sys").value = "";
-            document.getElementById("dia").value = "";
-            document.getElementById("result").innerHTML = "";
-            document.getElementById("result").className = "result";
-        }
-    </script>
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `<p>${resultText}</p><p>${advice}</p>`;
+        resultDiv.className = `result ${resultClass}`;
+    }
+</script>
+
 </body>
 </html>
